@@ -6,7 +6,7 @@ class ListService {
   async getColor(url) {
     const dColor = ["Red", "Green", "Blue", "None"];
 
-    let color = await ColorThief.getColor(url);
+    const color = await ColorThief.getColor(url);
 
     let max = color[0];
     let maxIndex = 0;
@@ -14,6 +14,7 @@ class ListService {
     for (let i = 1; i < color.length; i++) {
       if (color[i] > max) {
         maxIndex = i;
+        max = color[i]
       }
     }
 
@@ -28,19 +29,19 @@ class ListService {
 
   async getList() {
     try {
-      let data = await unirest.get(
+      const data = await unirest.get(
         "https://collectionapi.metmuseum.org/public/collection/v1/objects?departmentIds=11"
       );
-      let json_arr = [];
+      const json_arr = [];
 
       for (let i = 0; i < 120; i++) {
-        let picture = await unirest.get(
+        const picture = await unirest.get(
           `https://collectionapi.metmuseum.org/public/collection/v1/objects/${data.body.objectIDs[i]}`
         );
         const { objectID, primaryImageSmall } = picture.body;
         let list;
         if (primaryImageSmall) {
-          let { primeColor, dominanteColor } = await this.getColor(
+          const { primeColor, dominanteColor } = await this.getColor(
             primaryImageSmall
           );
           list = {
